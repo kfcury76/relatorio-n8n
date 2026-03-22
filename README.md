@@ -5,13 +5,15 @@
 
 ---
 
-## WORKFLOWS TESTADOS E ATIVOS (3)
+## WORKFLOWS TESTADOS E ATIVOS (5)
 
 | # | Workflow | ID | Status | Teste | Tag |
 |---|----------|----|--------|-------|-----|
 | 1 | Consultar Cardapio (tool) | `9JQ8ZZr77KVYnNTh` | ATIVO | OK - Sub-workflow funcional | Cosi - Atendimento |
 | 2 | Resposta Whats | `PL9pDNWyJ7nM1SWc` | ATIVO | OK - Exec #5741 sucesso (1.8s) | Cosi - Atendimento |
 | 3 | Emporio Cosi - Instagram | `C03ebvbUqUhi1gP5` | ATIVO | ERRO - Token Instagram expirado | Cosi - Atendimento |
+| 4 | Marmitaria - Notificacao Novo Pedido | `gq243gd2bcissbo6` | ATIVO | OK - Exec #5744 sucesso | Marmitaria - Operacional |
+| 5 | Marmitaria Araras - Instagram | `AfQvI2P0JAzFabsM` | INATIVO | Nao testado - verificar token IG | Marmitaria - Atendimento |
 
 ### Detalhes dos testes:
 
@@ -198,5 +200,38 @@ Serao migrados para Airtable.
 
 ---
 
+---
+
+## MARMITARIAARARAS - ANALISE
+
+**Site:** https://marmitariaararas.com.br (online, HTTP 200)
+**Repo:** https://github.com/cosiararas/marmitariaararas
+**Stack:** Next.js 16 + Supabase + Mercado Pago + Vercel
+
+### Arquitetura
+- Pagamento MP feito DIRETO no codigo (nao depende de n8n)
+- Admin panel em /admin (gestao de precos, itens, frete)
+- n8n usado apenas para notificacao de novos pedidos (opcional)
+
+### Tabelas Supabase
+- `menu_items` (cardapio, filtrado por business_unit='marmitaria')
+- `marmita_orders` (pedidos, source='marmitaria_araras')
+- `print_queue` (fila impressao, target='marmitaria')
+- `financial_entries` (financeiro, business_unit='marmitaria')
+- `delivery_config` (zonas de frete)
+- `menu_groups` + `menu_additions` (complementos)
+
+### Correcoes feitas (22/03/2026)
+- [x] Webhook path corrigido: `marmitaria-notificacao` → `marmitaria-pagamento-confirmado`
+- [x] Workflow ativado e testado (exec #5744 sucesso)
+
+### Pendencias Marmitariaararas
+- [ ] Verificar token Instagram do workflow `AfQvI2P0JAzFabsM`
+- [ ] ADMIN_PASSWORD esta como "trocar-antes-de-publicar" — TROCAR JA no Vercel
+- [ ] Validar assinatura webhook MP (sem validacao atualmente)
+
+---
+
 **Documento gerado automaticamente em 22/03/2026 as 19:00**
+**Ultima atualizacao: 22/03/2026 as 21:00**
 **Proximo review agendado: 23/03/2026**
